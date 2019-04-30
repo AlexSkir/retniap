@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <title>Document</title>
+</head>
+<body>
+    <header>
+        <div class="header">
+            <span><i class="fas fa-bars" id="list"></i></span>
+            <ul class="dropdown" >
+                <li class="list hidden"><span id="restart">Restart</span></li>
+                <li class="list hidden"><span id="save">Save progress</span></li>
+                <li class="list hidden"><span id="load">Load previous progress</span></li>
+            </ul>
+            
+            <span>CodeJam - Palette</span>
+        </div>
+    </header>
+    
+    <div class="container droppable">
+        
+        <div class="palette">
+            <div><button id="paint-bucket" class="default"><i class="fas fa-fill-drip"></i><span>Paint bucket (P)</span></button> </div>
+            <div><button id="choose-color" class="default"><i class="fas fa-eye-dropper"></i><span>Choose color (C)</span></button></div>
+            <div><button id="move" class="default"><i class="fas fa-arrows-alt"></i><span>Move (M)</span></button> </div>
+            <div><button id="transform" class="default"><i class="fas fa-exchange-alt"></i><span>Transform (T)</span></button></div>
+        </div>
+        
+        <div class="color">   
+            <div><div class="radiobutton" id="currentColor"></div><span>Current color</span></div>       
+            <div><div class="radiobutton" id="prevColor"></div><span>Prev color</span></div>
+            <div><div class="radiobutton"></div><span>Red</span></div>
+            <div><div class="radiobutton"></div><span>Blue</span></div>
+            <div><input type="color" name="colors" id="customed"><span>Custom color</span></div>        
+        </div>
+        <table class="canvas" > 
+            <tbody >  
+                <tr>
+                    <td><div class="square draggable droppable " id="i1"></div></td>
+                    <td><div class="square draggable droppable " id="i2"></div></td>
+                    <td><div class="square draggable droppable " id="i3"></div></td> 
+                </tr> 
+                <tr>
+                    <td><div class="square draggable droppable " id="i4"></div></td>
+                    <td><div class="square draggable droppable " id="i5"></div></td>
+                    <td><div class="square draggable droppable " id="i6"></div></td> 
+                </tr>        
+                <tr>
+                    <td><div class="square draggable droppable circle " id="i7"></div></td>
+                    <td><div class="square draggable droppable " id="i8"></div></td>
+                    <td><div class="square draggable droppable " id="i9"></div></td>
+                </tr>
+            </tbody>             
+        </table> 
+    </div>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="https://code.jquery.com/ui/1.11.3/jquery-ui.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
