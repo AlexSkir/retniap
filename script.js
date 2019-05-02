@@ -45,7 +45,7 @@ transformEl.addEventListener('click', () => {
         dragEl.classList.remove('hovered');
         window.state.currentTool = 'transformTool';        
         transformEl.focus();
-        document.body.style.cursor = 'url("C:/Users/Note/Desktop/js school/repos/retniap/assets/transform.png"), auto';
+        document.body.style.cursor = 'url("assets/transform.png"), auto';
     } else if (window.state.currentTool == 'transformTool'){
         window.state.currentTool = ''; 
         transform.classList.remove("hovered");
@@ -62,7 +62,7 @@ paintBucketEl.addEventListener('click', (e)=> {
         dragEl.classList.remove("hovered");
         window.state.currentTool = 'paintBucketTool';
         paintBucketEl.focus()  
-        document.body.style.cursor = "url('C:/Users/Note/Desktop/js school/repos/retniap/assets/bucket.png'), auto"      
+        document.body.style.cursor = 'url("assets/bucket.png"), auto'      
     } else if (window.state.currentTool == 'paintBucketTool') {
         window.state.currentTool = ''; 
         paintBucketEl.classList.remove("hovered");
@@ -80,7 +80,7 @@ colorPickerEl.addEventListener('click', (e)=> {
         dragEl.classList.remove("hovered");
         window.state.currentTool = 'colorPickerTool';
         colorPickerEl.focus();      
-        document.body.style.cursor = "url('C:/Users/Note/Desktop/js school/repos/retniap/assets/colorpicker.png') 4 12, auto"
+        document.body.style.cursor = 'url("assets/colorpicker.png") 4 12, auto'
     } else if (window.state.currentTool == 'colorPickerTool'){
         window.state.currentTool = ''; 
         colorPickerEl.classList.remove("hovered");
