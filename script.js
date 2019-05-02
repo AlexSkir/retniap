@@ -7,32 +7,15 @@ document.addEventListener('DOMContentLoaded', () =>
     window.state.prevColor = prev
     changeBG()
     //------------shape saver---------------//
-    var shapeIscircle = localStorage.getItem("shapeIscircle");
-    window.state.shape = JSON.parse(localStorage.getItem('elems'))
-    if (shapeIscircle == "true" && window.state.shape) {
-        var elements = JSON.parse(localStorage.getItem('elems'))        
-        for (var i = 0; i<elements.length; i++){
-            document.getElementById(elements[i]).className += " circle";
-        }      
-    }
-    //------------figure's color saver---------------//
-    var bgChanged = localStorage.getItem("bgChanged");
-    window.state.bg = JSON.parse(localStorage.getItem('bg'))
-    var colored = window.state.bg
-    if (bgChanged == "true" && window.state.bg) {
-        for (var i = 0; i<colored.length; i++){
-            document.getElementById(colored[i]['id']).style.backgroundColor = colored[i]['bg']
+    var style = JSON.parse(localStorage.getItem('style'));
+    //console.log(style)
+    if (style){
+        for (var i = 0; i< style.length; i++){
+            document.getElementById(style[i]['id']).style.backgroundColor = style[i]['bg'];
+            if (style[i]['circle']==true){
+                document.getElementById(style[i]['id']).classList.add('circle');
+            }
         }
-    }
-    if (localStorage.getItem('elems')){
-        window.state.shape = JSON.parse(localStorage.getItem('elems'))
-    } else {
-        window.state.shape = [];
-    }
-    if (localStorage.getItem('bg')){
-        window.state.bg = JSON.parse(localStorage.getItem('bg'))
-    } else {
-        window.state.bg = [];
     }
 })
 
@@ -49,13 +32,12 @@ const theInput = document.getElementById("customed");
 window.state = {
     currentTool: '',
     currentColor: currentColor,
-    prevColor: prevColor,
-    shape: [],    
-    bg: []
+    prevColor: prevColor
 };
 
 
 transformEl.addEventListener('click', () => {
+    
     if (window.state.currentTool !== 'transformTool') {
         transform.classList.add('hovered');
         paintBucketEl.classList.remove('hovered');
@@ -63,13 +45,15 @@ transformEl.addEventListener('click', () => {
         dragEl.classList.remove('hovered');
         window.state.currentTool = 'transformTool';        
         transformEl.focus();
-        document.body.style.cursor = 'default';
+        document.body.style.cursor = 'url("C:/Users/Note/Desktop/js school/repos/retniap/assets/transform.png"), auto';
     } else if (window.state.currentTool == 'transformTool'){
         window.state.currentTool = ''; 
         transform.classList.remove("hovered");
         transform.blur();
+        document.body.style.cursor = 'default'
     }
 });
+
 paintBucketEl.addEventListener('click', (e)=> {
     if (window.state.currentTool !== 'paintBucketTool') {
         paintBucketEl.classList.add("hovered");
@@ -96,11 +80,12 @@ colorPickerEl.addEventListener('click', (e)=> {
         dragEl.classList.remove("hovered");
         window.state.currentTool = 'colorPickerTool';
         colorPickerEl.focus();      
-        document.body.style.cursor = 'default';
+        document.body.style.cursor = "url('C:/Users/Note/Desktop/js school/repos/retniap/assets/colorpicker.png') 4 12, auto"
     } else if (window.state.currentTool == 'colorPickerTool'){
         window.state.currentTool = ''; 
         colorPickerEl.classList.remove("hovered");
-        colorPickerEl.blur();      
+        colorPickerEl.blur();   
+        document.body.style.cursor = 'default';   
     }     
     
 })
@@ -122,37 +107,23 @@ dragEl.addEventListener('click', (e)=> {
     }           
 })
 
-document.addEventListener('click', (e)=> {
+document.addEventListener('click', (e)=> {    
     
     if (window.state.currentTool== 'transformTool'){        
-        if (e.target.classList.contains("square")) {
-            e.target.classList.toggle('circle');
-            localStorage.setItem("shapeIscircle", "true");
-            var element = e.target.id;            
+        if (e.target.classList.contains("square")) {            
+            
+            var element = e.target.id;                       
             if (e.target.classList.contains("circle")){
-                if (window.state.shape.indexOf(element) == -1){
-                    window.state.shape.push(element)
-                }                
-            }
-            if (!e.target.classList.contains("circle")){
-                if (window.state.shape.indexOf(element) != -1){
-                    window.state.shape.splice(window.state.shape.indexOf(element), 1)
-                }                                
-            }
-            localStorage.setItem('elems', JSON.stringify(window.state.shape))
-        }        
+                e.target.classList.remove('circle'); 
+            } else {
+                e.target.classList.add('circle');
+            }            
+        }  
+             
     }
     if (window.state.currentTool== 'paintBucketTool'){        
         if (e.target.classList.contains("square")) {
-            e.target.style.backgroundColor = jQuery('#currentColor').css("background-color");
-            localStorage.setItem("bgChanged", "true");            
-            var element = e.target.id
-            
-            window.state.bg.push({
-                id: element,
-                bg: e.target.style.backgroundColor
-            })     
-            localStorage.setItem('bg', JSON.stringify(window.state.bg))
+            e.target.style.backgroundColor = jQuery('#currentColor').css("background-color");             
         }
     }
     if (window.state.currentTool== 'colorPickerTool'){  
@@ -181,7 +152,7 @@ document.addEventListener('click', (e)=> {
             drag: function(e) { 
                 if (window.state.currentTool!== 'dragTool'){
                     e.preventDefault(); 
-                }         
+                }                 
             }
         });
         
@@ -193,20 +164,77 @@ document.addEventListener('click', (e)=> {
                 var draggable = ui.draggable, droppable = $(this),
                 dragBG = draggable.css('backgroundColor'), dragShape = draggable.css('borderRadius'),
                 dropBG = droppable.css('backgroundColor'), dropShape = droppable.css('borderRadius');
-                
+                if (dragShape == '50%'){
+                    if (dropShape != '50%'){                        
+                        droppable.addClass('circle');
+                        draggable.removeClass('circle');
+                    }
+                } else if (dragShape != '50%'){
+                    if (dropShape == '50%'){                        
+                        draggable.addClass('circle');
+                    } 
+                }
                 draggable.css({
-                    backgroundColor: dropBG,
-                    borderRadius: dropShape
+                    backgroundColor: dropBG
                 });
                 
                 droppable.css({
-                    backgroundColor: dragBG,
-                    borderRadius: dragShape
+                    backgroundColor: dragBG
                 }); 
-                
             }            
-        });
+        });        
+        
+    }     
+    if (window.state.currentTool !='') {
+        var style = [
+            {
+                id: "i1",
+                bg: jQuery('#i1').css("background-color"),
+                circle: document.getElementById('i1').classList.contains('circle')
+            },
+            {
+                id: "i2",
+                bg: jQuery('#i2').css("background-color"),
+                circle: document.getElementById('i2').classList.contains('circle')
+            },
+            {
+                id: "i3",
+                bg: jQuery('#i3').css("background-color"),
+                circle: document.getElementById('i3').classList.contains('circle')
+            },
+            {
+                id: "i4",
+                bg: jQuery('#i4').css("background-color"),
+                circle: document.getElementById('i4').classList.contains('circle')
+            },
+            {
+                id: "i5",
+                bg: jQuery('#i5').css("background-color"),
+                circle: document.getElementById('i5').classList.contains('circle')
+            },
+            {
+                id: "i6",
+                bg: jQuery('#i6').css("background-color"),
+                circle: document.getElementById('i6').classList.contains('circle')
+            },
+            {
+                id: "i7",
+                bg: jQuery('#i7').css("background-color"),
+                circle: document.getElementById('i7').classList.contains('circle')
+            },
+            {
+                id: "i8",
+                bg: jQuery('#i8').css("background-color"),
+                circle: document.getElementById('i8').classList.contains('circle')
+            },
+            {
+                id: "i9",
+                bg: jQuery('#i9').css("background-color"),
+                circle: document.getElementById('i9').classList.contains('circle')
+            }];
+        localStorage.setItem('style', JSON.stringify(style))
     }
+    
 })
 
 
@@ -238,39 +266,7 @@ $('.container').bind('click', function(){
     $('.list').addClass('hidden')
 })
 
-$('#restart').click(function(){   
-    localStorage.clear();
-    document.location.reload(true);
-})
 
-var save = {
-    current: '',
-    prev: '',
-    elems: '',
-    bg: '',
-    shapeIscircle: '',
-    bgChanged: ''
-}
-
-$('#save').click(function(){  
-    save.current = localStorage.getItem("currentColor")
-    save.prev = localStorage.getItem("prevColor") 
-    save.elems = localStorage.getItem('elems') 
-    save.bg = localStorage.getItem('bg') 
-    save.shapeIscircle = localStorage.getItem("shapeIscircle");
-    save.bgChanged = localStorage.getItem("bgChanged");
-})
-
-
-$('#load').click(function(){
-    localStorage.setItem("currentColor", save.current) 
-    localStorage.setItem("prevColor", save.prev)
-    save.elems? localStorage.setItem('elems', save.elems) : false;
-    save.bg? localStorage.setItem('bg', save.bg) : false;
-    localStorage.setItem("shapeIscircle", save.shapeIscircle);
-    localStorage.setItem("bgChanged", save.bgChanged);
-    location.reload(true)
-})  
 
 function moveRect(e){
     switch(e.keyCode){
@@ -281,3 +277,33 @@ function moveRect(e){
     }
 }
 document.addEventListener("keydown", moveRect);
+
+
+
+
+$('#restart').click(function(){   
+    localStorage.clear();
+    document.location.reload(true);
+})
+
+var save = {
+    current: '',
+    prev: '',
+    style: ''    
+}
+
+$('#save').click(function(){  
+    save.current = localStorage.getItem("currentColor");
+    save.prev = localStorage.getItem("prevColor");
+    save.style = localStorage.getItem("style");
+    
+})
+
+
+$('#load').click(function(){
+    localStorage.setItem("currentColor", save.current); 
+    localStorage.setItem("prevColor", save.prev);    
+    save.style? localStorage.setItem("style", save.style) : false;
+    
+    location.reload(true)
+})
